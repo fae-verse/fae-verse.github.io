@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>FaeVerse | What's Your Pinterest Aesthetic?</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Georgia, 'Times New Roman', serif;
+    background: #fff7fb;
+    color: #3d2936;
+}
+
+.container {
+    max-width: 750px;
+    margin: auto;
+    padding: 30px 20px;
+}
+
+header {
+    text-align: center;
+    padding: 30px 10px;
+}
+
+.logo {
+    font-size: 42px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.subtitle {
+    font-size: 16px;
+    color: #876b7c;
+    margin-top: 8px;
+}
+
+.card {
+    background: white;
+    border-radius: 25px;
+    padding: 30px;
+    box-shadow: 0 8px 30px rgba(100, 60, 90, 0.12);
+    margin-bottom: 20px;
+}
+
+h1, h2 {
+    text-align: center;
+}
+
+.question {
+    font-size: 21px;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.option {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    margin: 12px 0;
+    border: 2px solid #ead9e4;
+    border-radius: 15px;
+    background: #fffafd;
+    color: #3d2936;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.option:hover {
+    background: #fcebf5;
+    transform: translateY(-2px);
+}
+
+button {
+    border: none;
+    border-radius: 15px;
+    padding: 15px 25px;
+    font-size: 16px;
+    cursor: pointer;
+    background: #d99abc;
+    color: white;
+    margin-top: 15px;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+.center {
+    text-align: center;
+}
+
+.progress {
+    text-align: center;
+    color: #98798c;
+    margin-bottom: 20px;
+}
+
+.result {
+    text-align: center;
+}
+
+.result-name {
+    font-size: 34px;
+    margin: 15px 0;
+}
+
+.result-description {
+    line-height: 1.7;
+    color: #654e5d;
+}
+
+.hidden {
+    display: none;
+}
+
+footer {
+    text-align: center;
+    padding: 30px;
+    color: #98798c;
+    font-size: 13px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+    <div class="logo">FaeVerse</div>
+    <div class="subtitle">quizzes for your Pinterest era ♡</div>
+</header>
+
+<div id="startScreen" class="card center">
+    <h1>What's Your Pinterest Aesthetic?</h1>
+
+    <p>
+        Answer 10 questions and discover the aesthetic
+        that matches your vibe.
+    </p>
+
+    <button onclick="startQuiz()">Start Quiz ✦</button>
+</div>
+
+<div id="quizScreen" class="card hidden">
+
+    <div class="progress" id="progress"></div>
+
+    <div class="question" id="question"></div>
+
+    <div id="options"></div>
+
+</div>
+
+<div id="resultScreen" class="card result hidden">
+
+    <h2>Your aesthetic is...</h2>
+
+    <div class="result-name" id="resultName"></div>
+
+    <p class="result-description" id="resultDescription"></p>
+
+    <button onclick="restartQuiz()">Take Quiz Again</button>
+
+</div>
+
+<footer>
+    © 2026 FaeVerse · Made with ♡
+</footer>
+
+</div>
+
+<script>
+
+const questions = [
+
+{
+    question: "Pick a place you'd love to spend an afternoon.",
+    options: [
+        ["A", "A tiny flower-filled cottage", "cottagecore"],
+        ["B", "A quiet old library", "dark"],
+        ["C", "A bright minimalist café", "clean"],
+        ["D", "A dreamy bedroom covered in bows", "coquette"]
+    ]
+},
+
+{
+    question: "Choose a color combination.",
+    options: [
+        ["A", "Cream + sage green", "cottagecore"],
+        ["B", "Black + burgundy", "dark"],
+        ["C", "White + beige", "clean"],
+        ["D", "Pink + white", "coquette"]
+    ]
+},
+
+{
+    question: "Which accessory would you choose?",
+    options: [
+        ["A", "A floral tote bag", "cottagecore"],
+        ["B", "A vintage silver necklace", "dark"],
+        ["C", "Simple gold jewelry", "clean"],
+        ["D", "A ribbon hair bow", "coquette"]
+    ]
+},
+
+{
+    question: "Pick your ideal weekend.",
+    options: [
+        ["A", "Baking and gardening", "cottagecore"],
+        ["B", "Reading a mysterious novel", "dark"],
+        ["C", "Going to a cute café", "clean"],
+        ["D", "Getting dressed up and taking photos", "coquette"]
+    ]
+},
+
+{
+    question: "Choose a room.",
+    options: [
+        ["A", "Wooden furniture and lots of plants", "cottagecore"],
+        ["B", "Dark wood and bookshelves", "dark"],
+        ["C", "White furniture and soft lighting", "clean"],
+        ["D", "Pink bedding and cute decorations", "coquette"]
+    ]
+},
+
+{
+    question: "Which outfit sounds most like you?",
+    options: [
+        ["A", "Flowy dress and cardigan", "cottagecore"],
+        ["B", "Dark sweater and boots", "dark"],
+        ["C", "Simple top and tailored trousers", "clean"],
+        ["D", "Skirt, ballet flats and a bow", "coquette"]
+    ]
+},
+
+{
+    question: "Pick a drink.",
+    options: [
+        ["A", "Strawberry lemonade", "cottagecore"],
+        ["B", "Black coffee", "dark"],
+        ["C", "Iced matcha", "clean"],
+        ["D", "Strawberry milk", "coquette"]
+    ]
+},
+
+{
+    question: "Which activity sounds best?",
+    options: [
+        ["A", "Painting flowers", "cottagecore"],
+        ["B", "Reading mystery books", "dark"],
+        ["C", "Organizing your room", "clean"],
+        ["D", "Making a cute photo board", "coquette"]
+    ]
+},
+
+{
+    question: "Choose a wallpaper for your phone.",
+    options: [
+        ["A", "Wildflowers", "cottagecore"],
+        ["B", "A dark vintage painting", "dark"],
+        ["C", "A simple neutral design", "clean"],
+        ["D", "Pink bows and hearts", "coquette"]
+    ]
+},
+
+{
+    question: "Choose your dream holiday.",
+    options: [
+        ["A", "A peaceful countryside getaway", "cottagecore"],
+        ["B", "Exploring an old European city", "dark"],
+        ["C", "A modern city with beautiful cafés", "clean"],
+        ["D", "A romantic Paris-inspired trip", "coquette"]
+    ]
+}
+
+];
+
+const results = {
+
+    cottagecore: {
+        name: "🌷 Cottagecore",
+        description:
+        "You love peaceful, cozy and nature-inspired vibes. Flowers, warm afternoons, little cafés and slow days are totally your aesthetic."
+    },
+
+    dark: {
+        name: "🖤 Dark Academia",
+        description:
+        "Your aesthetic is mysterious, intellectual and vintage. Think old libraries, rainy days, dark colors and endless books."
+    },
+
+    clean: {
+        name: "🤍 Clean Girl",
+        description:
+        "You gravitate toward simple, fresh and elegant vibes. Minimal spaces, neutral colors and effortless details fit your aesthetic."
+    },
+
+    coquette: {
+        name: "🎀 Coquette",
+        description:
+        "Your aesthetic is romantic, playful and feminine. Think ribbons, soft colors, pretty details and dreamy little moments."
+    }
+
+};
+
+let currentQuestion = 0;
+
+let scores = {
+    cottagecore: 0,
+    dark: 0,
+    clean: 0,
+    coquette: 0
+};
+
+function startQuiz() {
+
+    currentQuestion = 0;
+
+    scores = {
+        cottagecore: 0,
+        dark: 0,
+        clean: 0,
+        coquette: 0
+    };
+
+    document.getElementById("startScreen").classList.add("hidden");
+    document.getElementById("resultScreen").classList.add("hidden");
+    document.getElementById("quizScreen").classList.remove("hidden");
+
+    showQuestion();
+}
+
+function showQuestion() {
+
+    const q = questions[currentQuestion];
+
+    document.getElementById("progress").textContent =
+        "Question " + (currentQuestion + 1) + " of " + questions.length;
+
+    document.getElementById("question").textContent = q.question;
+
+    const optionsDiv = document.getElementById("options");
+
+    optionsDiv.innerHTML = "";
+
+    q.options.forEach(option => {
+
+        const button = document.createElement("button");
+
+        button.className = "option";
+
+        button.textContent = option[0] + ". " + option[1];
+
+        button.onclick = function() {
+            chooseAnswer(option[2]);
+        };
+
+        optionsDiv.appendChild(button);
+
+    });
+}
+
+function chooseAnswer(type) {
+
+    scores[type]++;
+
+    currentQuestion++;
+
+    if (currentQuestion < questions.length) {
+
+        showQuestion();
+
+    } else {
+
+        showResult();
+
+    }
+}
+
+function showResult() {
+
+    document.getElementById("quizScreen").classList.add("hidden");
+    document.getElementById("resultScreen").classList.remove("hidden");
+
+    let winner = "cottagecore";
+    let highest = scores.cottagecore;
+
+    for (const type in scores) {
+
+        if (scores[type] > highest) {
+
+            highest = scores[type];
+            winner = type;
+
+        }
+
+    }
+
+    document.getElementById("resultName").textContent =
+        results[winner].name;
+
+    document.getElementById("resultDescription").textContent =
+        results[winner].description;
+}
+
+function restartQuiz() {
+
+    document.getElementById("resultScreen").classList.add("hidden");
+    document.getElementById("startScreen").classList.remove("hidden");
+
+}
+
+</script>
+
+</body>
+</html>
