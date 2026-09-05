@@ -932,6 +932,394 @@ document.getElementById("feedbackForm").addEventListener("submit", function(even
     FORM CONNECTION GOES HERE
 */
 });
+<script>
+
+const questions = [
+
+  {
+    question: `Your friends suddenly text “GET READY. WE'RE GOING OUT.” What are you doing?`,
+    answers: [
+      `Already dressed. I was waiting for this moment. 💅`,
+      `“Where are we going?” because I need the full plan.`,
+      `Getting ready while blasting music at full volume.`,
+      `“I can't believe I'm actually going” but secretly excited.`,
+      `Making the whole night feel like a movie.`,
+      `Asking who else is coming 👀`,
+      `Somehow becoming the main character of the night.`,
+      `Saying yes immediately and figuring everything out later.`
+    ]
+  },
+
+  {
+    question: `Someone you REALLY like finally texts you… What happens?`,
+    answers: [
+      `I stare at the notification for 10 minutes before replying.`,
+      `I reply immediately. I don't play games.`,
+      `I send it to my best friend first 😭`,
+      `I act completely normal while internally panicking.`,
+      `I reread their message approximately 37 times.`,
+      `Depends… are they actually worth my time?`,
+      `I already know exactly what I'm going to say.`,
+      `I flirt back and see where it goes.`
+    ]
+  },
+
+  {
+    question: `It's 1 AM. What's your vibe?`,
+    answers: [
+      `Listening to music and thinking about EVERYTHING.`,
+      `Watching random videos and refusing to sleep.`,
+      `Having a deep conversation with someone.`,
+      `Making imaginary scenarios in my head.`,
+      `Suddenly wanting to change my entire life.`,
+      `Laughing at something that isn't even funny anymore.`,
+      `Dancing around my room for absolutely no reason.`,
+      `Peacefully scrolling until I fall asleep.`
+    ]
+  },
+
+  {
+    question: `Pick your ideal music-listening moment:`,
+    answers: [
+      `On a late-night drive with the windows down.`,
+      `Alone in my room with headphones on.`,
+      `Getting ready before going somewhere.`,
+      `Walking somewhere while pretending I'm in a music video.`,
+      `At a party when THAT song comes on.`,
+      `Lying in bed remembering old memories.`,
+      `Singing with your friends until you're basically screaming.`,
+      `Dancing like nobody is watching.`
+    ]
+  },
+
+  {
+    question: `Your crush walks into the room. You…`,
+    answers: [
+      `Pretend I didn't notice.`,
+      `Immediately notice EVERYTHING.`,
+      `Make eye contact and smile.`,
+      `Suddenly forget how to behave normally. 😭`,
+      `Keep doing whatever I was doing. They can come to me.`,
+      `Tell my best friend immediately.`,
+      `Try to look effortlessly cool.`,
+      `Become 10× more confident.`
+    ]
+  },
+
+  {
+    question: `Your perfect Friday night is:`,
+    answers: [
+      `Going somewhere spontaneous with friends.`,
+      `Getting dressed up and going OUT.`,
+      `A sleepover with snacks, movies and gossip.`,
+      `A chaotic night that becomes a story you'll tell forever.`,
+      `A cute dinner + music + good vibes.`,
+      `Staying home with my favorite people.`,
+      `Dancing until I can't anymore.`,
+      `Whatever happens, happens. I'm here for the memories.`
+    ]
+  },
+
+  {
+    question: `What's your biggest weakness?`,
+    answers: [
+      `I overthink EVERYTHING.`,
+      `I get attached to memories.`,
+      `I care too much about what people think.`,
+      `I can be way too impulsive.`,
+      `I romanticize everything.`,
+      `I trust people too easily.`,
+      `I pretend I don't care when I actually do.`,
+      `I get bored VERY easily.`
+    ]
+  },
+
+  {
+    question: `Which describes you best?`,
+    answers: [
+      `Quietly emotional.`,
+      `Confident and independent.`,
+      `Sweet but chaotic.`,
+      `Romantic at heart.`,
+      `The friend who makes everyone laugh.`,
+      `A little unpredictable.`,
+      `Nostalgic and sentimental.`,
+      `Main-character energy.`
+    ]
+  },
+
+  {
+    question: `Pick a photo for your camera roll:`,
+    answers: [
+      `A blurry photo from a night out.`,
+      `A sunset.`,
+      `You and your friends laughing.`,
+      `A random screenshot that only YOU understand 😭`,
+      `A cute outfit photo.`,
+      `An old childhood picture.`,
+      `A concert/party photo.`,
+      `A completely random photo from a day you never want to forget.`
+    ]
+  },
+
+  {
+    question: `If your life were a movie, what would the current chapter be called?`,
+    answers: [
+      `Figuring Things Out.`,
+      `New Era.`,
+      `Plot Twist.`,
+      `What Am I Doing? 😭`,
+      `Maybe This Is The Moment.`,
+      `Back To The Memories.`,
+      `No One Knows What's Happening.`,
+      `Let's See What Happens.`
+    ]
+  }
+
+];
+
+const results = [
+
+  {
+    song: `Woman`,
+    artist: `Doja Cat`,
+    description: `You're confident, expressive and know how to bring energy into a room. You don't need everything planned — sometimes the vibe is the plan.`
+  },
+
+  {
+    song: `drivers license`,
+    artist: `Olivia Rodrigo`,
+    description: `You're reflective and sentimental. Little things can bring back entire memories, and you probably have a very specific playlist for every mood.`
+  },
+
+  {
+    song: `Girls Like You`,
+    artist: `Maroon 5`,
+    description: `You're warm, social and nostalgic for the moments that involve your favorite people. Your memories are usually connected to people, places and good times.`
+  },
+
+  {
+    song: `SugarCrash!`,
+    artist: `ElyOtto`,
+    description: `Your energy is chaotic in the best possible way. You get bored easily, love random moments and somehow turn ordinary situations into stories.`
+  },
+
+  {
+    song: `Love Me Like You Do`,
+    artist: `Ellie Goulding`,
+    description: `You see the cinematic side of life. Music, memories and little moments can feel much bigger to you than they probably look from the outside.`
+  },
+
+  {
+    song: `Last Friday Night (T.G.I.F.)`,
+    artist: `Katy Perry`,
+    description: `You're spontaneous, playful and always ready for a memorable night. Your favorite memories are probably the ones that weren't completely planned.`
+  },
+
+  {
+    song: `TiK ToK`,
+    artist: `Kesha`,
+    description: `You're energetic, carefree and here for the experience. You don't need a perfect plan when you can simply make the moment fun.`
+  },
+
+  {
+    song: `What Makes You Beautiful`,
+    artist: `One Direction`,
+    description: `You're bright, feel-good and nostalgic for simpler times. There's something wholesome about the way you remember your favorite moments.`
+  }
+
+];
+
+let currentQuestion = 0;
+let scores = new Array(results.length).fill(0);
+
+const questionEl = document.getElementById("question");
+const answersEl = document.getElementById("answers");
+const progressText = document.getElementById("progressText");
+const progressFill = document.getElementById("progressFill");
+const quizArea = document.getElementById("quizArea");
+const resultArea = document.getElementById("resultArea");
+const playButton = document.querySelector(".date");
+
+
+function showQuestion() {
+
+  const q = questions[currentQuestion];
+
+  questionEl.textContent = q.question;
+
+  progressText.textContent =
+    `QUESTION ${String(currentQuestion + 1).padStart(2, "0")} / ${questions.length}`;
+
+  progressFill.style.width =
+    `${((currentQuestion + 1) / questions.length) * 100}%`;
+
+  answersEl.innerHTML = "";
+
+  q.answers.forEach((answer, index) => {
+
+    const button = document.createElement("button");
+
+    button.className = "answer";
+
+    button.type = "button";
+
+    button.textContent =
+      `${String.fromCharCode(65 + index)}. ${answer}`;
+
+    button.addEventListener("click", function() {
+      chooseAnswer(index);
+    });
+
+    answersEl.appendChild(button);
+
+  });
+}
+
+
+function startQuiz() {
+
+  currentQuestion = 0;
+
+  scores = new Array(results.length).fill(0);
+
+  resultArea.classList.add("hidden");
+
+  quizArea.classList.remove("hidden");
+
+  showQuestion();
+
+  quizArea.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+
+}
+
+
+playButton.addEventListener("click", startQuiz);
+
+playButton.style.cursor = "pointer";
+
+
+function chooseAnswer(index) {
+
+  scores[index]++;
+
+  currentQuestion++;
+
+  if (currentQuestion < questions.length) {
+
+    showQuestion();
+
+  } else {
+
+    showResult();
+
+  }
+
+}
+
+
+function showResult() {
+
+  let highest = Math.max(...scores);
+
+  let winners = [];
+
+  scores.forEach((score, index) => {
+
+    if (score === highest) {
+      winners.push(index);
+    }
+
+  });
+
+  const winner =
+    winners[Math.floor(Math.random() * winners.length)];
+
+  const result = results[winner];
+
+  document.getElementById("resultSong").textContent =
+    result.song;
+
+  document.getElementById("resultArtist").textContent =
+    `by ${result.artist}`;
+
+  document.getElementById("screenSong").textContent =
+    result.song;
+
+  document.getElementById("screenArtist").textContent =
+    result.artist;
+
+  document.getElementById("resultDescription").textContent =
+    result.description;
+
+  quizArea.classList.add("hidden");
+
+  resultArea.classList.remove("hidden");
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+
+}
+
+
+function restartQuiz() {
+
+  currentQuestion = 0;
+
+  scores = new Array(results.length).fill(0);
+
+  resultArea.classList.add("hidden");
+
+  quizArea.classList.remove("hidden");
+
+  showQuestion();
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+
+}
+
+
+function hideGuestbook() {
+
+  document.querySelector(".guestbook").innerHTML =
+    `<p style="text-align:center;font-size:13px;">
+      Guestbook skipped ♡<br><br>
+      Thanks for taking the quiz!
+    </p>`;
+
+}
+
+
+document.getElementById("feedbackForm").addEventListener("submit", function(event) {
+
+  event.preventDefault();
+
+  const successMessage =
+    document.getElementById("successMessage");
+
+  successMessage.style.display = "block";
+
+  this.querySelector(".send-button").style.display = "none";
+
+});
+
+
+/* Keep the quiz blank until the user presses PLAY. */
+
+questionEl.textContent = "";
+
+answersEl.innerHTML = "";
+
+progressFill.style.width = "0%";
+
 </script>
 
 </body>
