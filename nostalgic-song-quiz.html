@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Which Nostalgic Song Are You? | FaeVerse</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255,255,255,.45), transparent 25%),
+    linear-gradient(135deg, #d8d0bd, #eee6d5 45%, #c8bea9);
+  color: #29251f;
+  font-family: "Courier New", monospace;
+  overflow-x: hidden;
+}
+
+/* subtle old-camera grain */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: .12;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(0,0,0,.12) 4px
+    );
+  z-index: 10;
+}
+
+.page {
+  width: min(900px, 92%);
+  margin: auto;
+  padding: 28px 0 60px;
+}
+
+.top-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  font-size: 11px;
+  letter-spacing: 2px;
+  margin-bottom: 18px;
+  opacity: .75;
+}
+
+header {
+  background: #eee7d8;
+  border: 2px solid #29251f;
+  box-shadow: 7px 7px 0 #29251f;
+  padding: 28px 24px;
+  transform: rotate(-.4deg);
+}
+
+.small-title {
+  font-size: 12px;
+  letter-spacing: 3px;
+  margin-bottom: 10px;
+}
+
+h1 {
+  font-family: Georgia, serif;
+  font-size: clamp(34px, 7vw, 64px);
+  line-height: .95;
+  margin: 0;
+  font-weight: normal;
+}
+
+.subtitle {
+  margin-top: 16px;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.date {
+  margin-top: 20px;
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+
+.player {
+  margin: 35px auto 20px;
+  width: 150px;
+  height: 105px;
+  background: #575249;
+  border: 4px solid #29251f;
+  border-radius: 10px;
+  position: relative;
+  box-shadow: 5px 5px 0 rgba(41,37,31,.7);
+}
+
+.player::before {
+  content: "";
+  position: absolute;
+  width: 75px;
+  height: 35px;
+  left: 34px;
+  top: 16px;
+  background: #bcb4a3;
+  border: 3px solid #29251f;
+  border-radius: 4px;
+}
+
+.reel {
+  position: absolute;
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  background: #29251f;
+  border: 5px solid #999080;
+  top: 23px;
+}
+
+.reel.left {
+  left: 43px;
+}
+
+.reel.right {
+  right: 43px;
+}
+
+.player::after {
+  content: "FAE♡";
+  position: absolute;
+  bottom: 9px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: #eee7d8;
+  font-size: 10px;
+  letter-spacing: 2px;
+}
+
+.quiz-card {
+  margin-top: 30px;
+  background: rgba(245,240,229,.92);
+  border: 2px solid #29251f;
+  padding: clamp(20px, 5vw, 42px);
+  box-shadow: 8px 8px 0 rgba(41,37,31,.85);
+}
+
+.progress-text {
+  font-size: 11px;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+
+.progress-bar {
+  height: 9px;
+  border: 2px solid #29251f;
+  margin-bottom: 30px;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: #29251f;
+  transition: width .3s ease;
+}
+
+.question {
+  font-family: Georgia, serif;
+  font-size: clamp(25px, 5vw, 38px);
+  line-height: 1.15;
+  margin-bottom: 25px;
+}
+
+.answers {
+  display: grid;
+  gap: 11px;
+}
+
+.answer {
+  width: 100%;
+  padding: 15px;
+  background: #e3dccd;
+  border: 2px solid #29251f;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  transition: .15s ease;
+}
+
+.answer:hover {
+  background: #29251f;
+  color: #eee7d8;
+  transform: translateX(5px);
+}
+
+.answer:active {
+  transform: translateX(2px);
+}
+
+.hidden {
+  display: none !important;
+}
+
+.result {
+  text-align: center;
+}
+
+.result-label {
+  font-size: 11px;
+  letter-spacing: 3px;
+  margin-bottom: 15px;
+}
+
+.result h2 {
+  font-family: Georgia, serif;
+  font-size: clamp(34px, 7vw, 58px);
+  margin: 5px 0;
+  line-height: 1;
+}
+
+.artist {
+  font-size: 14px;
+  margin-bottom: 25px;
+}
+
+.album-card {
+  max-width: 430px;
+  margin: 25px auto;
+  padding: 25px;
+  background: #d2c7b2;
+  border: 2px solid #29251f;
+  transform: rotate(.5deg);
+  box-shadow: 6px 6px 0 #29251f;
+}
+
+.fake-screen {
+  background: #25231f;
+  color: #d8d0bd;
+  padding: 20px;
+  border: 3px inset #777064;
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.vibe {
+  margin-top: 25px;
+  font-family: Georgia, serif;
+  font-size: 19px;
+  line-height: 1.6;
+}
+
+.retake {
+  margin-top: 30px;
+  padding: 13px 20px;
+  background: #29251f;
+  color: #eee7d8;
+  border: 2px solid #29251f;
+  font: inherit;
+  cursor: pointer;
+}
+
+.retake:hover {
+  background: transparent;
+  color: #29251f;
+}
+
+.guestbook {
+  margin-top: 45px;
+  border-top: 2px dashed #29251f;
+  padding-top: 35px;
+}
+
+.guestbook h3 {
+  font-family: Georgia, serif;
+  font-size: 30px;
+  margin: 0 0 8px;
+}
+
+.guestbook-intro {
+  font-size: 12px;
+  line-height: 1.7;
+  margin-bottom: 25px;
+}
+
+.form-question {
+  margin: 24px 0;
+}
+
+.form-question label {
+  display: block;
+  font-weight: bold;
+  font-size: 13px;
+  margin-bottom: 9px;
+}
+
+.form-question small {
+  display: block;
+  opacity: .7;
+  margin-bottom: 8px;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 13px;
+  background: #f4eee2;
+  border: 2px solid #29251f;
+  font: inherit;
+  color: #29251f;
+}
+
+textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.radio-list {
+  display: grid;
+  gap: 8px;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px;
+  border: 1px solid #999080;
+}
+
+.radio-option input {
+  width: auto;
+}
+
+.send-button {
+  width: 100%;
+  padding: 15px;
+  background: #29251f;
+  color: #eee7d8;
+  border: 2px solid #29251f;
+  font: inherit;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.send-button:hover {
+  background: transparent;
+  color: #29251f;
+}
+
+.skip {
+  display: block;
+  margin: 18px auto 0;
+  background: none;
+  border: none;
+  text-decoration: underline;
+  cursor: pointer;
+  font: inherit;
+}
+
+.success {
+  margin-top: 18px;
+  padding: 15px;
+  border: 2px solid #29251f;
+  display: none;
+  line-height: 1.6;
+  font-size: 12px;
+}
+
+footer {
+  text-align: center;
+  margin-top: 35px;
+  font-size: 10px;
+  letter-spacing: 1px;
+  opacity: .7;
+}
+
+@media (max-width: 600px) {
+  .top-line {
+    flex-direction: column;
+  }
+
+  header {
+    box-shadow: 5px 5px 0 #29251f;
+  }
+
+  .quiz-card {
+    box-shadow: 5px 5px 0 rgba(41,37,31,.85);
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+  <div class="top-line">
+    <span>FAEVERSE // NOSTALGIA FILE</span>
+    <span>NO. 001</span>
+  </div>
+
+  <header>
+    <div class="small-title">♪ PERSONAL MUSIC ARCHIVE ♪</div>
+    <h1>Which Nostalgic<br>Song Are You?</h1>
+
+    <div class="subtitle">
+      A completely unnecessary investigation into your music taste,
+      memories, chaos and main-character energy.
+    </div>
+
+    <div class="date">
+      DIGITAL MEMORY CARD // PLAY ▶
+    </div>
+  </header>
+
+  <div class="player">
+    <div class="reel left"></div>
+    <div class="reel right"></div>
+  </div>
+
+  <section class="quiz-card" id="quizCard">
+
+    <div id="quizArea">
+
+      <div class="progress-text" id="progressText">
+        QUESTION 01 / 10
+      </div>
+
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+
+      <div class="question" id="question"></div>
+
+      <div class="answers" id="answers"></div>
+
+    </div>
+
+    <div class="result hidden" id="resultArea">
+
+      <div class="result-label">
+        YOUR NOSTALGIA FILE SAYS...
+      </div>
+
+      <h2 id="resultSong"></h2>
+
+      <div class="artist" id="resultArtist"></div>
+
+      <div class="album-card">
+
+        <div class="fake-screen">
+          <div>♫ NOW PLAYING</div>
+          <div id="screenSong"></div>
+          <div id="screenArtist"></div>
+          <br>
+          <div>████████████░░░</div>
+          <div>00:47 ───── 03:21</div>
+        </div>
+
+      </div>
+
+      <div class="vibe" id="resultDescription"></div>
+
+      <button class="retake" onclick="restartQuiz()">
+        ↻ PLAY AGAIN
+      </button>
+
+      <div class="guestbook">
+
+        <h3>FAEVERSE GUESTBOOK</h3>
+
+        <div class="guestbook-intro">
+          Your result is yours either way — these questions are
+          completely optional. If you want, leave something behind
+          for Fae to read. ♡
+        </div>
+
+        <form id="feedbackForm">
+
+          <div class="form-question">
+
+            <label>01 — Which era are you most nostalgic for?</label>
+
+            <div class="radio-list">
+
+              <label class="radio-option">
+                <input type="radio" name="era" value="2000–2005">
+                2000–2005
+              </label>
+
+              <label class="radio-option">
+                <input type="radio" name="era" value="2006–2010">
+                2006–2010
+              </label>
+
+              <label class="radio-option">
+                <input type="radio" name="era" value="2011–2015">
+                2011–2015
+              </label>
+
+              <label class="radio-option">
+                <input type="radio" name="era" value="2016–2019">
+                2016–2019
+              </label>
+
+              <label class="radio-option">
+                <input type="radio" name="era" value="2020–2022">
+                2020–2022
+              </label>
+
+              <label class="radio-option">
+                <input type="radio" name="era" value="Something else">
+                Something else
+              </label>
+
+            </div>
+          </div>
+
+          <div class="form-question">
+
+            <label>02 — What song instantly takes you back to a memory?</label>
+
+            <input
+              type="text"
+              name="memory_song"
+              placeholder="Type a song..."
+            >
+
+          </div>
+
+          <div class="form-question">
+
+            <label>03 — What's something from your childhood you wish you could experience again?</label>
+
+            <textarea
+              name="childhood_memory"
+              placeholder="Write anything..."
+            ></textarea>
+
+          </div>
+
+          <div class="form-question">
+
+            <label>04 — What should FaeVerse's next quiz be about?</label>
+
+            <input
+              type="text"
+              name="next_quiz"
+              placeholder="Give Fae an idea..."
+            >
+
+          </div>
+
+          <div class="form-question">
+
+            <label>05 — Anything you want to tell Fae?</label>
+
+            <textarea
+              name="message"
+              placeholder="Leave a little note..."
+            ></textarea>
+
+          </div>
+
+          <button class="send-button" type="submit">
+            ✉ SEND TO FAE
+          </button>
+
+          <button
+            class="skip"
+            type="button"
+            onclick="hideGuestbook()"
+          >
+            Skip this part
+          </button>
+
+          <div class="success" id="successMessage">
+            Thanks for leaving something in the FaeVerse guestbook ♡
+            <br><br>
+            The form connection still needs to be switched on before
+            submissions can actually reach Fae.
+          </div>
+
+        </form>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <footer>
+    FAEVERSE © — MADE FOR THE NOSTALGIC ONES
+  </footer>
+
+</div>
+
+<script>
+
+const questions = [
+
+  {
+    question: `Your friends suddenly text “GET READY. WE'RE GOING OUT.” What are you doing?`,
+    answers: [
+      `Already dressed. I was waiting for this moment. 💅`,
+      `“Where are we going?” because I need the full plan.`,
+      `Getting ready while blasting music at full volume.`,
+      `“I can't believe I'm actually going” but secretly excited.`,
+      `Making the whole night feel like a movie.`,
+      `Asking who else is coming 👀`,
+      `Somehow becoming the main character of the night.`,
+      `Saying yes immediately and figuring everything out later.`
+    ]
+  },
+
+  {
+    question: `Someone you REALLY like finally texts you… What happens?`,
+    answers: [
+      `I stare at the notification for 10 minutes before replying.`,
+      `I reply immediately. I don't play games.`,
+      `I send it to my best friend first 😭`,
+      `I act completely normal while internally panicking.`,
+      `I reread their message approximately 37 times.`,
+      `Depends… are they actually worth my time?`,
+      `I already know exactly what I'm going to say.`,
+      `I flirt back and see where it goes.`
+    ]
+  },
+
+  {
+    question: `It's 1 AM. What's your vibe?`,
+    answers: [
+      `Listening to music and thinking about EVERYTHING.`,
+      `Watching random videos and refusing to sleep.`,
+      `Having a deep conversation with someone.`,
+      `Making imaginary scenarios in my head.`,
+      `Suddenly wanting to change my entire life.`,
+      `Laughing at something that isn't even funny anymore.`,
+      `Dancing around my room for absolutely no reason.`,
+      `Peacefully scrolling until I fall asleep.`
+    ]
+  },
+
+  {
+    question: `Pick your ideal music-listening moment:`,
+    answers: [
+      `On a late-night drive with the windows down.`,
+      `Alone in my room with headphones on.`,
+      `Getting ready before going somewhere.`,
+      `Walking somewhere while pretending I'm in a music video.`,
+      `At a party when THAT song comes on.`,
+      `Lying in bed remembering old memories.`,
+      `Singing with your friends until you're basically screaming.`,
+      `Dancing like nobody is watching.`
+    ]
+  },
+
+  {
+    question: `Your crush walks into the room. You…`,
+    answers: [
+      `Pretend I didn't notice.`,
+      `Immediately notice EVERYTHING.`,
+      `Make eye contact and smile.`,
+      `Suddenly forget how to behave normally. 😭`,
+      `Keep doing whatever I was doing. They can come to me.`,
+      `Tell my best friend immediately.`,
+      `Try to look effortlessly cool.`,
+      `Become 10× more confident.`
+    ]
+  },
+
+  {
+    question: `Your perfect Friday night is:`,
+    answers: [
+      `Going somewhere spontaneous with friends.`,
+      `Getting dressed up and going OUT.`,
+      `A sleepover with snacks, movies and gossip.`,
+      `A chaotic night that becomes a story you'll tell forever.`,
+      `A cute dinner + music + good vibes.`,
+      `Staying home with my favorite people.`,
+      `Dancing until I can't anymore.`,
+      `Whatever happens, happens. I'm here for the memories.`
+    ]
+  },
+
+  {
+    question: `What's your biggest weakness?`,
+    answers: [
+      `I overthink EVERYTHING.`,
+      `I get attached to memories.`,
+      `I care too much about what people think.`,
+      `I can be way too impulsive.`,
+      `I romanticize everything.`,
+      `I trust people too easily.`,
+      `I pretend I don't care when I actually do.`,
+      `I get bored VERY easily.`
+    ]
+  },
+
+  {
+    question: `Which describes you best?`,
+    answers: [
+      `Quietly emotional.`,
+      `Confident and independent.`,
+      `Sweet but chaotic.`,
+      `Romantic at heart.`,
+      `The friend who makes everyone laugh.`,
+      `A little unpredictable.`,
+      `Nostalgic and sentimental.`,
+      `Main-character energy.`
+    ]
+  },
+
+  {
+    question: `Pick a photo for your camera roll:`,
+    answers: [
+      `A blurry photo from a night out.`,
+      `A sunset.`,
+      `You and your friends laughing.`,
+      `A random screenshot that only YOU understand 😭`,
+      `A cute outfit photo.`,
+      `An old childhood picture.`,
+      `A concert/party photo.`,
+      `A completely random photo from a day you never want to forget.`
+    ]
+  },
+
+  {
+    question: `If your life were a movie, what would the current chapter be called?`,
+    answers: [
+      `Figuring Things Out.`,
+      `New Era.`,
+      `Plot Twist.`,
+      `What Am I Doing? 😭`,
+      `Maybe This Is The Moment.`,
+      `Back To The Memories.`,
+      `No One Knows What's Happening.`,
+      `Let's See What Happens.`
+    ]
+  }
+
+];
+
+const results = [
+
+  {
+    song: `Woman`,
+    artist: `Doja Cat`,
+    description: `You're confident, expressive and know how to bring energy into a room. You don't need everything planned — sometimes the vibe is the plan.`
+  },
+
+  {
+    song: `drivers license`,
+    artist: `Olivia Rodrigo`,
+    description: `You're reflective and sentimental. Little things can bring back entire memories, and you probably have a very specific playlist for every mood.`
+  },
+
+  {
+    song: `Girls Like You`,
+    artist: `Maroon 5`,
+    description: `You're warm, social and nostalgic for the moments that involve your favorite people. Your memories are usually connected to people, places and good times.`
+  },
+
+  {
+    song: `SugarCrash!`,
+    artist: `ElyOtto`,
+    description: `Your energy is chaotic in the best possible way. You get bored easily, love random moments and somehow turn ordinary situations into stories.`
+  },
+
+  {
+    song: `Love Me Like You Do`,
+    artist: `Ellie Goulding`,
+    description: `You see the cinematic side of life. Music, memories and little moments can feel much bigger to you than they probably look from the outside.`
+  },
+
+  {
+    song: `Last Friday Night (T.G.I.F.)`,
+    artist: `Katy Perry`,
+    description: `You're spontaneous, playful and always ready for a memorable night. Your favorite memories are probably the ones that weren't completely planned.`
+  },
+
+  {
+    song: `TiK ToK`,
+    artist: `Kesha`,
+    description: `You're energetic, carefree and here for the experience. You don't need a perfect plan when you can simply make the moment fun.`
+  },
+
+  {
+    song: `What Makes You Beautiful`,
+    artist: `One Direction`,
+    description: `You're bright, feel-good and nostalgic for simpler times. There's something wholesome about the way you remember your favorite moments.`
+  }
+
+];
+
+let currentQuestion = 0;
+let scores = new Array(results.length).fill(0);
+
+const questionEl = document.getElementById("question");
+const answersEl = document.getElementById("answers");
+const progressText = document.getElementById("progressText");
+const progressFill = document.getElementById("progressFill");
+const quizArea = document.getElementById("quizArea");
+const resultArea = document.getElementById("resultArea");
+
+function showQuestion() {
+
+  const q = questions[currentQuestion];
+
+  questionEl.textContent = q.question;
+
+  progressText.textContent =
+    `QUESTION ${String(currentQuestion + 1).padStart(2, "0")} / ${questions.length}`;
+
+  progressFill.style.width =
+    `${((currentQuestion + 1) / questions.length) * 100}%`;
+
+  answersEl.innerHTML = "";
+
+  q.answers.forEach((answer, index) => {
+
+    const button = document.createElement("button");
+
+    button.className = "answer";
+    button.textContent =
+      `${String.fromCharCode(65 + index)}. ${answer}`;
+
+    button.onclick = () => chooseAnswer(index);
+
+    answersEl.appendChild(button);
+
+  });
+}
+
+function chooseAnswer(index) {
+
+  scores[index]++;
+
+  currentQuestion++;
+
+  if (currentQuestion < questions.length) {
+
+    showQuestion();
+
+  } else {
+
+    showResult();
+
+  }
+}
+
+function showResult() {
+
+  let highest = Math.max(...scores);
+
+  let winners = [];
+
+  scores.forEach((score, index) => {
+
+    if (score === highest) {
+      winners.push(index);
+    }
+
+  });
+
+  const winner =
+    winners[Math.floor(Math.random() * winners.length)];
+
+  const result = results[winner];
+
+  document.getElementById("resultSong").textContent =
+    result.song;
+
+  document.getElementById("resultArtist").textContent =
+    `by ${result.artist}`;
+
+  document.getElementById("screenSong").textContent =
+    result.song;
+
+  document.getElementById("screenArtist").textContent =
+    result.artist;
+
+  document.getElementById("resultDescription").textContent =
+    result.description;
+
+  quizArea.classList.add("hidden");
+  resultArea.classList.remove("hidden");
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+}
+
+function restartQuiz() {
+
+  currentQuestion = 0;
+  scores = new Array(results.length).fill(0);
+
+  resultArea.classList.add("hidden");
+  quizArea.classList.remove("hidden");
+
+  showQuestion();
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+}
+
+function hideGuestbook() {
+
+  document.querySelector(".guestbook").innerHTML =
+    `<p style="text-align:center;font-size:13px;">
+      Guestbook skipped ♡<br><br>
+      Thanks for taking the quiz!
+    </p>`;
+
+}
+
+document.getElementById("feedbackForm").addEventListener("submit", function(event) {
+
+  event.preventDefault();
+
+  /*
+    FORM CONNECTION GOES HERE
